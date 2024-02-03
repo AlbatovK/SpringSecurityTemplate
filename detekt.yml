@@ -1,0 +1,9 @@
+config:
+  validation: true
+  warningsAsErrors: false
+
+build:
+  maxIssues: 20
+
+console-reports:
+  active: true

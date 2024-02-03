@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - 'SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/database'
+      - 'SPRING_DATASOURCE_USERNAME=user'
+      - 'SPRING_DATASOURCE_PASSWORD=password'
+      - 'SPRING_JPA_HIBERNATE_DDL_AUTO=update'
+      - 'REDIS_HOST=redis'
+      - 'REDIS_PORT=6379'
+
+  db:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=database'
+      - 'POSTGRES_PASSWORD=password'
+      - 'POSTGRES_USER=user'
+      - 'PGPORT=5432'
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: 'redis:latest'
+    container_name: redis
+    hostname: redis
+    ports:
+      - '6379:6379'
+    environment:
+      - 'ALLOW_EMPTY_PASSWORD=yes'
