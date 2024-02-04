@@ -1,3 +1,4 @@
 databaseChangeLog:
-  - includeAll:
-      path: db/changelog/changes
+  - include:
+      file: 1.0.0/03.02.2024/Init.postgresql.sql
+      relativeToChangelogFile: true
