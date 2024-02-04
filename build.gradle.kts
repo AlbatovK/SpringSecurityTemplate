@@ -51,7 +51,6 @@ dependencies {
     // Persistence
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    implementation("org.liquibase:liquibase-core")
     runtimeOnly("org.postgresql:postgresql")
 
     // Security
@@ -73,6 +72,9 @@ dependencies {
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+
+    // Liquibase
+    implementation("org.liquibase:liquibase-core")
 }
 
 val jibBaseImage = "eclipse-temurin:17-jre"
