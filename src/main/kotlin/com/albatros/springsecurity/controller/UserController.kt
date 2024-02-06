@@ -27,8 +27,12 @@ class UserController(private val service: UserService) {
     fun deleteUser(@PathVariable userId: Long) = service.deleteById(userId)
 
     @PostMapping("/save", consumes = ["application/json"])
-    fun saveUser(@Valid @RequestBody user: User) = service.saveUser(user)
+    fun saveUser(@Valid @RequestBody user: User) = service.createUser(user)
 
     @GetMapping("/get/{userId}")
     fun getById(@PathVariable userId: Long) = service.getUserById(userId)
+
+    @GetMapping("/admin")
+    @Deprecated(message = "For demonstration purposes only")
+    fun getAdminForCurrentUser() = service.getAdmin()
 }

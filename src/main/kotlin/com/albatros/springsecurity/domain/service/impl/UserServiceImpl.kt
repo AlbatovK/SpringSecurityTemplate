@@ -1,6 +1,8 @@
 package com.albatros.springsecurity.domain.service.impl
 
+import com.albatros.springsecurity.domain.model.database.Role
 import com.albatros.springsecurity.domain.model.database.User
+import com.albatros.springsecurity.domain.model.exception.AlreadyExistsException
 import com.albatros.springsecurity.domain.model.exception.NotFoundException
 import com.albatros.springsecurity.domain.repository.UserRepository
 import com.albatros.springsecurity.domain.service.UserService
@@ -11,6 +13,8 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.cache.annotation.Caching
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 
@@ -22,7 +26,35 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
         put = [CachePut(value = ["User"], key = "#user.id")],
         evict = [CacheEvict(value = ["Users"], allEntries = true)]
     )
-    override fun saveUser(@Valid user: User) = repository.save(user)
+    fun saveUser(@Valid user: User) = repository.save(user)
+
+    override fun userDetailsService(): UserDetailsService = UserDetailsService { username ->
+        repository.findByUsername(username)
+    }
+
+    @Deprecated("For demonstration purposes only")
+    @CacheEvict(value = ["Users"], allEntries = true)
+    override fun getAdmin() {
+        val username = SecurityContextHolder.getContext().authentication.name
+        val user = repository.findByUsername(username) ?: throw NotFoundException()
+        user.role = Role.ROLE_ADMIN
+        saveUser(user)
+    }
+
+    override fun createUser(@Valid user: User): User {
+        if (repository.existsByUsername(user.username)) {
+            throw AlreadyExistsException("User with id ${user.id} already exists")
+        }
+
+        if (repository.existsByEmail(user.email)) {
+            throw AlreadyExistsException("User with email ${user.email} already exists")
+        }
+
+        return saveUser(user)
+
+    }
+
+    fun getUserByUsername(username: String) = repository.findByUsername(username)
 
     @Cacheable(value = ["User"], key = "#userId")
     override fun getUserById(userId: Long): User = repository.findEntityById(userId) ?: throw NotFoundException()
@@ -43,7 +75,7 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
     @CachePut(value = ["User"], key = "#userId")
     override fun updateUser(@Valid user: User, userId: Long): User {
         val found = repository.findEntityById(userId) ?: throw NotFoundException()
-        found.name = user.name
+        found.email = user.email
         return repository.save(found)
     }
 }
