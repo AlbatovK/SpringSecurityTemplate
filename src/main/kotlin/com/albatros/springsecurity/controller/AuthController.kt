@@ -21,5 +21,4 @@ class AuthController(
 
     @PostMapping("/sign-in")
     fun signIn(@Valid @RequestBody signInRequest: SignInRequest) = authenticationService.signIn(signInRequest)
-
 }

@@ -75,5 +75,4 @@ class SecurityConfig(
     @Bean
     fun getAuthenticationManager(config: AuthenticationConfiguration): AuthenticationManager =
         config.authenticationManager
-
 }

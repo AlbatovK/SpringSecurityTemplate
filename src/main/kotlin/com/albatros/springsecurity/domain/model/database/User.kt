@@ -6,11 +6,11 @@ import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
-import java.io.Serializable
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.validation.annotation.Validated
+import java.io.Serializable
 
 @Entity(name = "users")
 @Validated
@@ -48,7 +48,6 @@ class User(
     override fun isCredentialsNonExpired(): Boolean = true
 
     override fun isEnabled(): Boolean = true
-
 }
 
 enum class Role {

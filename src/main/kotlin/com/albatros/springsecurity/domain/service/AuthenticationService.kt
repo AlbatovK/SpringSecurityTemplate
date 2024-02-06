@@ -11,5 +11,4 @@ interface AuthenticationService {
     fun signUp(request: SignUpRequest): JwtAuthenticationResponse
 
     fun signIn(request: SignInRequest): JwtAuthenticationResponse
-
 }
