@@ -14,7 +14,6 @@ import org.springframework.cache.annotation.Caching
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 
@@ -27,10 +26,6 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
         evict = [CacheEvict(value = ["Users"], allEntries = true)]
     )
     fun saveUser(@Valid user: User) = repository.save(user)
-
-    override fun userDetailsService(): UserDetailsService = UserDetailsService { username ->
-        repository.findByUsername(username)
-    }
 
     @Deprecated("For demonstration purposes only")
     @CacheEvict(value = ["Users"], allEntries = true)
