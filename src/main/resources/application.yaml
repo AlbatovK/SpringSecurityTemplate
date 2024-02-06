@@ -32,14 +32,15 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
     database: postgresql
 
+
   liquibase:
-    enabled: true
+    enabled: false
     drop-first: false
     default-schema: public
 
@@ -55,13 +56,15 @@ springdoc:
   swagger-ui:
     show-extensions: true
     operations-sorter: method
-  paths-to-match:
-    - /user/**
-    - /actuator/health
 
 logging:
   level:
     org.hibernate.type.descriptor.sql: trace
+
+jwt:
+  key: ${JWT_TOKEN:9ab3fee80daeaf6f8c80d420be7ad1e29a6fef1cde8efafd8a551789c479c2b6}
+  access-token-expiration: 36000000
+  refresh-token-expiration: 2592000000
 
 api-info:
   contact-email: "albatovkonstantin@yandex.ru"
