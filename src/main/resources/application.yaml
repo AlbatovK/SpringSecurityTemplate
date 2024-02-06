@@ -38,7 +38,6 @@ spring:
     show-sql: true
     database: postgresql
 
-
   liquibase:
     enabled: false
     drop-first: false

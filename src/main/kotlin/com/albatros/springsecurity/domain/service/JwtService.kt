@@ -1,6 +1,5 @@
 package com.albatros.springsecurity.domain.service
 
-import java.util.Date
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.validation.annotation.Validated
 

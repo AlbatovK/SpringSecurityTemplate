@@ -20,5 +20,4 @@ interface UserService {
 
     @Deprecated(message = "For demonstration purposes only")
     fun getAdmin()
-
 }

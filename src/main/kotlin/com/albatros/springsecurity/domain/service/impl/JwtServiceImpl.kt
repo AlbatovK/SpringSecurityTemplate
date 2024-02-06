@@ -5,10 +5,10 @@ import com.albatros.springsecurity.domain.model.database.User
 import com.albatros.springsecurity.domain.service.JwtService
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import java.util.Date
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
+import java.util.Date
 
 @Service
 @Validated
@@ -61,5 +61,4 @@ class JwtServiceImpl(private val jwtConfig: JwtConfig) : JwtService {
         .build()
         .parseSignedClaims(token)
         .payload
-
 }

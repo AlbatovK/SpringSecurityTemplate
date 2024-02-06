@@ -51,7 +51,6 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
         }
 
         return saveUser(user)
-
     }
 
     fun getUserByUsername(username: String) = repository.findByUsername(username)
