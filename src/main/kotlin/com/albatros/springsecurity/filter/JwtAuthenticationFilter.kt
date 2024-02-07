@@ -2,6 +2,8 @@ package com.albatros.springsecurity.filter
 
 import com.albatros.springsecurity.domain.service.JwtService
 import com.albatros.springsecurity.domain.service.UserService
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.MalformedJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -34,7 +36,15 @@ class JwtAuthenticationFilter(
         }
 
         val jwt = authHeader.substringAfter(BEARER_PREFIX)
-        val username = jwtService.extractUsername(jwt)
+        val username = try {
+            jwtService.extractUsername(jwt)
+        } catch (e: ExpiredJwtException) {
+            filterChain.doFilter(request, response)
+            return
+        } catch (e: MalformedJwtException) {
+            filterChain.doFilter(request, response)
+            return
+        }
 
         username?.let {
             if (it.isNotEmpty() && SecurityContextHolder.getContext().authentication == null) {

@@ -1,8 +1,11 @@
 package com.albatros.springsecurity.controller
 
 import com.albatros.springsecurity.domain.model.exception.AbstractApiException
+import com.albatros.springsecurity.domain.model.exception.InvalidTokenException
 import com.albatros.springsecurity.domain.model.exception.ValidationErrorException
 import com.albatros.springsecurity.domain.model.response.ApiResponse
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.security.SignatureException
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -25,6 +28,16 @@ class ExceptionResolver {
                 ValidationErrorException.Violation(v.propertyPath.toString(), v.message)
             }
         ).asResponse()
+    }
+
+    @ExceptionHandler(value = [SignatureException::class])
+    fun handle(cause: SignatureException, request: WebRequest): ResponseEntity<ApiResponse> {
+        return InvalidTokenException().asResponse()
+    }
+
+    @ExceptionHandler(value = [ExpiredJwtException::class])
+    fun handle(cause: ExpiredJwtException, request: WebRequest): ResponseEntity<ApiResponse> {
+        return InvalidTokenException().asResponse()
     }
 
     @ExceptionHandler(value = [MethodArgumentNotValidException::class])

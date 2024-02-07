@@ -18,7 +18,7 @@ spring:
     type: redis
     redis:
       cache-null-values: false
-      time-to-live: 40000
+      time-to-live: ${CACHE_TTL:40000}
 
   mvc:
     pathmatch:
@@ -26,9 +26,9 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/database
-    username: user
-    password: password
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/database}
+    username: ${DB_USER:user}
+    password: ${DB_PASSWORD:password}
 
   jpa:
     hibernate:
@@ -45,8 +45,8 @@ spring:
 
   security:
     user:
-      name: ${USER_NAME:user}
-      password: ${USER_PASSWORD:password}
+      name: ${SEC_USER_NAME:user}
+      password: ${SEC_USER_PASSWORD:password}
 
 springdoc:
   api-docs:
@@ -61,18 +61,18 @@ logging:
     org.hibernate.type.descriptor.sql: trace
 
 jwt:
-  key: ${JWT_TOKEN:9ab3fee80daeaf6f8c80d420be7ad1e29a6fef1cde8efafd8a551789c479c2b6}
+  key: ${JWT_SIGNING_KEY:9ab3fee80daeaf6f8c80d420be7ad1e29a6fef1cde8efafd8a551789c479c2b6}
   access-token-expiration: 36000000
   refresh-token-expiration: 2592000000
 
 api-info:
-  contact-email: "albatovkonstantin@yandex.ru"
-  contact-url: "https://idk.com"
-  contact-name: "Albatov Konstantin"
-  description: "Spring Security App On Steroids"
-  external-docs-description: "External docs :)"
-  license-url: "https://idk.com"
-  external-docs-url: "https://idk.com"
-  license-name: "License Name"
-  title: "Spring Security"
-  version: "v0.0.1"
+  contact-email: ${INFO_EMAIL:albatovkonstantin@yandex.ru}
+  contact-url: ${INFO_CONTACT:https://idk.com}
+  contact-name: ${INFO_NAME:Albatov Konstantin}
+  description: ${INFO_DESCR:Spring Security App On Steroids}
+  external-docs-description: ${INFO_EXT_DESCR:External docs :)}
+  license-url: ${INFO_LICENSE_URL:https://idk.com}
+  external-docs-url: ${INFO_EXT_URL:https://idk.com}
+  license-name: ${INFO_LICENSE_NAME:License Name}
+  title: ${INFO_TITLE:Spring Security}
+  version: ${INFO_VERSION:v0.0.1}
