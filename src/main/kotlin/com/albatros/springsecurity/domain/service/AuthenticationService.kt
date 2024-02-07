@@ -1,5 +1,6 @@
 package com.albatros.springsecurity.domain.service
 
+import com.albatros.springsecurity.domain.model.request.RefreshTokenRequest
 import com.albatros.springsecurity.domain.model.request.SignInRequest
 import com.albatros.springsecurity.domain.model.request.SignUpRequest
 import com.albatros.springsecurity.domain.model.response.JwtAuthenticationResponse
@@ -11,4 +12,5 @@ interface AuthenticationService {
     fun signUp(request: SignUpRequest): JwtAuthenticationResponse
 
     fun signIn(request: SignInRequest): JwtAuthenticationResponse
+    fun refreshAccessToken(refreshTokenRequest: RefreshTokenRequest): JwtAuthenticationResponse
 }

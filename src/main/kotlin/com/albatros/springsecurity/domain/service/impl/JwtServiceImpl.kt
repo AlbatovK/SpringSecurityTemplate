@@ -18,10 +18,10 @@ class JwtServiceImpl(private val jwtConfig: JwtConfig) : JwtService {
         jwtConfig.key.toByteArray()
     )
 
-    override fun generateToken(userDetails: UserDetails): String {
+    override fun generateToken(userDetails: UserDetails, expirationDate: Date): String {
         return generateToken(
             userDetails,
-            Date(System.currentTimeMillis() + jwtConfig.accessTokenExpiration),
+            expirationDate,
             mutableMapOf<String, Any>().apply {
                 if (userDetails is User) {
                     put("id", userDetails.id)

@@ -1,5 +1,6 @@
 package com.albatros.springsecurity.controller
 
+import com.albatros.springsecurity.domain.model.request.RefreshTokenRequest
 import com.albatros.springsecurity.domain.model.request.SignInRequest
 import com.albatros.springsecurity.domain.model.request.SignUpRequest
 import com.albatros.springsecurity.domain.service.AuthenticationService
@@ -21,4 +22,8 @@ class AuthController(
 
     @PostMapping("/sign-in")
     fun signIn(@Valid @RequestBody signInRequest: SignInRequest) = authenticationService.signIn(signInRequest)
+
+    @PostMapping("/refresh")
+    fun refreshAccessToken(@Valid @RequestBody refreshTokenRequest: RefreshTokenRequest) =
+        authenticationService.refreshAccessToken(refreshTokenRequest)
 }
