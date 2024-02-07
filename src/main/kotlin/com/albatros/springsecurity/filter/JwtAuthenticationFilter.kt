@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -16,7 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 @Component
 class JwtAuthenticationFilter(
     private val jwtService: JwtService,
-    private val userService: UserService
+    private val userDetailsService: UserDetailsService,
 ) : OncePerRequestFilter() {
 
     companion object {
@@ -48,7 +49,7 @@ class JwtAuthenticationFilter(
 
         username?.let {
             if (it.isNotEmpty() && SecurityContextHolder.getContext().authentication == null) {
-                val userDetails = userService.userDetailsService().loadUserByUsername(username)
+                val userDetails = userDetailsService.loadUserByUsername(username)
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     val context = SecurityContextHolder.createEmptyContext()
                     val authToken = UsernamePasswordAuthenticationToken(

@@ -10,6 +10,7 @@ import com.albatros.springsecurity.domain.service.JwtService
 import com.albatros.springsecurity.domain.service.UserService
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
@@ -20,7 +21,8 @@ class AuthenticationServiceImpl(
     private val userService: UserService,
     private val jwtService: JwtService,
     private val passwordEncoder: PasswordEncoder,
-    private val authenticationManager: AuthenticationManager
+    private val authenticationManager: AuthenticationManager,
+    private val userDetailsService: UserDetailsService
 ) : AuthenticationService {
 
     override fun signUp(request: SignUpRequest): JwtAuthenticationResponse {
@@ -43,7 +45,7 @@ class AuthenticationServiceImpl(
                 request.username, request.password
             )
         )
-        val user = userService.userDetailsService().loadUserByUsername(
+        val user = userDetailsService.loadUserByUsername(
             request.username
         )
         return JwtAuthenticationResponse(
