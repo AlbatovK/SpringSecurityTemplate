@@ -19,7 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration
 
 @Configuration
-@EnableMethodSecurity
+@EnableMethodSecurity(
+    securedEnabled = true,
+    jsr250Enabled = true,
+    prePostEnabled = true
+)
 @EnableWebSecurity
 class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
