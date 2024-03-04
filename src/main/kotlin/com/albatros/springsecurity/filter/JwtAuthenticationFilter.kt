@@ -1,6 +1,5 @@
 package com.albatros.springsecurity.filter
 
-import com.albatros.springsecurity.domain.model.exception.InvalidTokenException
 import com.albatros.springsecurity.domain.service.JwtService
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException

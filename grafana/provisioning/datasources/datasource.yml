@@ -1,0 +1,29 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: Proxy
+    orgId: 1
+    url: http://prometheus:9090
+    isDefault: true
+    version: 1
+    editable: true
+
+  - name: Redis
+    type: redis-datasource
+    access: proxy
+    isDefault: false
+    editable: true
+    url: redis://redis:6379
+    uid: redisdatasource
+
+  - name: Loki
+    type: loki
+    access: proxy
+    isDefault: false
+    basicAuth: false
+    editable: true
+    url: http://loki:3100
+    jsonData:
+      maxLines: 1000

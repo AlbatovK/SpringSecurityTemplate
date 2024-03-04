@@ -1,0 +1,18 @@
+global:
+  resolve_timeout: 10s
+
+route:
+  receiver: "default-receiver"
+  routes:
+    - receiver: "redis-receiver"
+      matchers:
+        - job="redis"
+
+receivers:
+  - name: "default-receiver"
+  - name: "redis-receiver"
+    telegram_configs:
+      - bot_token: 6724442634:AAE6iPwY0PVQw6IpVpZmnI6Pojsf_f84W7U
+        chat_id: -4163013734
+        api_url: https://api.telegram.org
+        parse_mode: ""
