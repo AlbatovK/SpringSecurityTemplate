@@ -14,6 +14,7 @@ import com.albatros.springsecurity.domain.repository.RefreshTokenRepository
 import com.albatros.springsecurity.domain.service.AuthenticationService
 import com.albatros.springsecurity.domain.service.JwtService
 import com.albatros.springsecurity.domain.service.UserService
+import io.micrometer.observation.annotation.Observed
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
@@ -25,6 +26,7 @@ import java.util.Date
 
 @Service
 @Validated
+@Observed(name = "AuthenticationServiceImpl")
 class AuthenticationServiceImpl(
     private val userService: UserService,
     private val jwtService: JwtService,

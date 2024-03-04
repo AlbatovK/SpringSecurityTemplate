@@ -6,6 +6,7 @@ import com.albatros.springsecurity.domain.model.exception.AlreadyExistsException
 import com.albatros.springsecurity.domain.model.exception.NotFoundException
 import com.albatros.springsecurity.domain.repository.UserRepository
 import com.albatros.springsecurity.domain.service.UserService
+import io.micrometer.observation.annotation.Observed
 import jakarta.validation.Valid
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.CachePut
@@ -19,6 +20,7 @@ import org.springframework.validation.annotation.Validated
 
 @Service
 @Validated
+@Observed(name = "UserServiceImpl")
 class UserServiceImpl(private val repository: UserRepository) : UserService {
 
     @Caching(

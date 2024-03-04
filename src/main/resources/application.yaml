@@ -56,7 +56,14 @@ springdoc:
     show-extensions: true
     operations-sorter: method
 
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
 logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
   level:
     org.hibernate.type.descriptor.sql: trace
 

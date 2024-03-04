@@ -6,6 +6,7 @@ import com.albatros.springsecurity.domain.model.exception.ValidationErrorExcepti
 import com.albatros.springsecurity.domain.model.response.ApiResponse
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.security.SignatureException
+import io.micrometer.observation.annotation.Observed
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 
 @ControllerAdvice
+@Observed(name = "ExceptionResolver")
 class ExceptionResolver {
 
     @ExceptionHandler(value = [AbstractApiException::class])

@@ -4,6 +4,7 @@ import com.albatros.springsecurity.domain.model.request.RefreshTokenRequest
 import com.albatros.springsecurity.domain.model.request.SignInRequest
 import com.albatros.springsecurity.domain.model.request.SignUpRequest
 import com.albatros.springsecurity.domain.service.AuthenticationService
+import io.micrometer.observation.annotation.Observed
 import jakarta.validation.Valid
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @Validated
+@Observed(name = "AuthController")
 @RequestMapping("/auth")
 class AuthController(
     private val authenticationService: AuthenticationService,

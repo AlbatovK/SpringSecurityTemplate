@@ -2,6 +2,7 @@ package com.albatros.springsecurity.controller
 
 import com.albatros.springsecurity.domain.model.database.User
 import com.albatros.springsecurity.domain.service.UserService
+import io.micrometer.observation.annotation.Observed
 import jakarta.validation.Valid
 import org.springframework.data.domain.Pageable
 import org.springframework.validation.annotation.Validated
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @Validated
 @RestController
+@Observed(name = "UserController")
 @RequestMapping("/user")
 class UserController(private val service: UserService) {
 

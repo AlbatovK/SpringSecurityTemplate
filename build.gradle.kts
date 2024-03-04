@@ -20,7 +20,7 @@ allOpen {
     annotations(
         "jakarta.persistence.Entity",
         "jakarta.persistence.Embeddable",
-        "jakarta.persistence.MappedSuperclass"
+        "jakarta.persistence.MappedSuperclass",
     )
 }
 
@@ -28,7 +28,7 @@ noArg {
     annotations(
         "jakarta.persistence.Entity",
         "jakarta.persistence.Embeddable",
-        "jakarta.persistence.MappedSuperclass"
+        "jakarta.persistence.MappedSuperclass",
     )
 }
 
@@ -78,6 +78,13 @@ dependencies {
 
     // Liquibase
     implementation("org.liquibase:liquibase-core")
+
+    // Observability
+    implementation("io.micrometer:micrometer-tracing-bridge-otel")
+    implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
+    implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:1.0.3")
+    runtimeOnly("com.github.loki4j:loki-logback-appender:1.3.2")
+    implementation("org.springframework:spring-aspects")
 }
 
 val jibBaseImage = "eclipse-temurin:17-jre"
@@ -110,7 +117,7 @@ tasks.withType<KotlinCompile> {
 detekt {
     buildUponDefaultConfig = true
     config.setFrom(
-        file("detekt.yml")
+        file("detekt.yml"),
     )
 }
 

@@ -5,12 +5,14 @@ import com.albatros.springsecurity.domain.model.database.User
 import com.albatros.springsecurity.domain.service.JwtService
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import io.micrometer.observation.annotation.Observed
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 import java.util.Date
 
 @Service
+@Observed(name = "JwtServiceImpl")
 @Validated
 class JwtServiceImpl(private val jwtConfig: JwtConfig) : JwtService {
 
