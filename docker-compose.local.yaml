@@ -45,6 +45,17 @@ services:
     environment:
       - REDIS_ADDR=redis
 
+  postgres-exporter:
+    depends_on:
+      - db
+    image: quay.io/prometheuscommunity/postgres-exporter
+    ports:
+      - '9187:9187'
+    environment:
+      - DATA_SOURCE_URI=db:5432/postgres?sslmode=disable
+      - DATA_SOURCE_USER=user
+      - DATA_SOURCE_PASS=password
+
   prometheus:
     image: prom/prometheus
     command: [ "--config.file=/prometheus.yml" ]
@@ -56,6 +67,7 @@ services:
     depends_on:
       - redis-exporter
       - alertmanager
+      - postgres-exporter
 
   alertmanager:
     image: prom/alertmanager

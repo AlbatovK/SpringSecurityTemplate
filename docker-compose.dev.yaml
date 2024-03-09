@@ -39,11 +39,24 @@ services:
       - 'ALLOW_EMPTY_PASSWORD=yes'
 
   redis-exporter:
+    depends_on:
+      - redis
     image: quay.io/oliver006/redis_exporter
     ports:
       - '9121:9121'
     environment:
       - REDIS_ADDR=redis
+
+  postgres-exporter:
+    depends_on:
+      - db
+    image: quay.io/prometheuscommunity/postgres-exporter
+    ports:
+      - '9187:9187'
+    environment:
+      - DATA_SOURCE_URI=db:5432/postgres?sslmode=disable
+      - DATA_SOURCE_USER=user
+      - DATA_SOURCE_PASS=password
 
   prometheus:
     image: prom/prometheus
@@ -56,6 +69,7 @@ services:
     depends_on:
       - redis-exporter
       - alertmanager
+      - postgres-exporter
 
   alertmanager:
     image: prom/alertmanager
@@ -87,6 +101,11 @@ services:
     command: "--config.file=/etc/loki/loki.yml"
     volumes:
       - ./config/loki/loki.yml:/etc/loki/loki.yml
+    environment:
+      - JAEGER_AGENT_HOST=tempo
+      - JAEGER_ENDPOINT=http://tempo:14268/api/traces
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
     ports:
       - "3100:3100"
 
@@ -96,3 +115,11 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/promtail/promtail.yml:/etc/promtail/promtail.yml
+
+  tempo:
+    image: grafana/tempo
+    command: [ "--config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./config/tempo/tempo.yaml:/etc/tempo.yaml
+    ports:
+      - "9411:9411"
