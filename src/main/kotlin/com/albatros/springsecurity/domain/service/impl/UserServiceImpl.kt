@@ -20,12 +20,13 @@ import org.springframework.validation.annotation.Validated
 @Service
 @Validated
 class UserServiceImpl(private val repository: UserRepository) : UserService {
-
     @Caching(
         put = [CachePut(value = ["User"], key = "#user.id")],
-        evict = [CacheEvict(value = ["Users"], allEntries = true)]
+        evict = [CacheEvict(value = ["Users"], allEntries = true)],
     )
-    fun saveUser(@Valid user: User) = repository.save(user)
+    fun saveUser(
+        @Valid user: User,
+    ) = repository.save(user)
 
     @Deprecated("For demonstration purposes only")
     @CacheEvict(value = ["Users"], allEntries = true)
@@ -36,7 +37,9 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
         saveUser(user)
     }
 
-    override fun createUser(@Valid user: User): User {
+    override fun createUser(
+        @Valid user: User,
+    ): User {
         if (repository.existsByUsername(user.username)) {
             throw AlreadyExistsException("User with id ${user.id} already exists")
         }
@@ -61,13 +64,16 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
     @Caching(
         evict = [
             CacheEvict(value = ["Users"], allEntries = true),
-            CacheEvict(value = ["User"], key = "#userId")
-        ]
+            CacheEvict(value = ["User"], key = "#userId"),
+        ],
     )
     override fun deleteById(userId: Long) = repository.deleteById(userId)
 
     @CachePut(value = ["User"], key = "#userId")
-    override fun updateUser(@Valid user: User, userId: Long): User {
+    override fun updateUser(
+        @Valid user: User,
+        userId: Long,
+    ): User {
         val found = repository.findEntityById(userId) ?: throw NotFoundException()
         found.email = user.email
         return repository.save(found)

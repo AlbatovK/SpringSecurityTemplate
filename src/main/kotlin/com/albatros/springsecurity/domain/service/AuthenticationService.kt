@@ -8,9 +8,9 @@ import org.springframework.validation.annotation.Validated
 
 @Validated
 interface AuthenticationService {
-
     fun signUp(request: SignUpRequest): JwtAuthenticationResponse
 
     fun signIn(request: SignInRequest): JwtAuthenticationResponse
+
     fun refreshAccessToken(refreshTokenRequest: RefreshTokenRequest): JwtAuthenticationResponse
 }

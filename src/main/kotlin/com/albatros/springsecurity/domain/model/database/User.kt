@@ -15,27 +15,23 @@ import java.io.Serializable
 @Entity(name = "users")
 @Validated
 class User(
-
     @Column(nullable = false, length = 10)
     @field:NotBlank
     private var username: String,
-
     @Column(nullable = false, unique = true, length = 20)
     @field:Email
     var email: String,
-
     @Column(nullable = false, length = 120)
     @field:NotBlank
     private var password: String,
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    var role: Role = Role.ROLE_USER
-
+    var role: Role = Role.ROLE_USER,
 ) : AbstractEntity(), UserDetails, Serializable {
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = mutableListOf(
-        SimpleGrantedAuthority(role.name)
-    )
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
+        mutableListOf(
+            SimpleGrantedAuthority(role.name),
+        )
 
     override fun getPassword(): String = password
 
@@ -52,5 +48,5 @@ class User(
 
 enum class Role {
     ROLE_USER,
-    ROLE_ADMIN;
+    ROLE_ADMIN,
 }

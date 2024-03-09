@@ -11,23 +11,23 @@ import java.util.Collections
 
 @Configuration
 class CacheManagerConfig {
-
     companion object {
         val timeToLiveDuration: Duration = Duration.ofSeconds(40_000)
     }
 
     @Bean
     fun cacheManager(connectionFactory: RedisConnectionFactory): RedisCacheManager {
-
-        val cacheConfig = RedisCacheConfiguration
-            .defaultCacheConfig()
-            .disableCachingNullValues()
+        val cacheConfig =
+            RedisCacheConfiguration
+                .defaultCacheConfig()
+                .disableCachingNullValues()
 
         val cacheWriter = RedisCacheWriter.lockingRedisCacheWriter(connectionFactory)
 
-        val cacheDefaults = RedisCacheConfiguration.defaultCacheConfig()
-            .entryTtl(timeToLiveDuration)
-            .disableCachingNullValues()
+        val cacheDefaults =
+            RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(timeToLiveDuration)
+                .disableCachingNullValues()
 
         return RedisCacheManager
             .builder(cacheWriter)

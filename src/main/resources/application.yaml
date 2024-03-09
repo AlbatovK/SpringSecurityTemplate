@@ -48,6 +48,12 @@ spring:
       name: ${SEC_USER_NAME:user}
       password: ${SEC_USER_PASSWORD:password}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health"
+
 springdoc:
   api-docs:
     path: /api-docs
@@ -55,6 +61,10 @@ springdoc:
   swagger-ui:
     show-extensions: true
     operations-sorter: method
+  paths-to-exclude:
+    - /actuator
+    - /actuator/health/*
+
 
 logging:
   level:

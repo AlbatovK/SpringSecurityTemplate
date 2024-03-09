@@ -23,7 +23,7 @@ import org.springframework.web.cors.CorsConfiguration
 @EnableWebSecurity
 class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
-    private val userDetailsService: UserDetailsService
+    private val userDetailsService: UserDetailsService,
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
@@ -33,7 +33,7 @@ class SecurityConfig(
                     val corsConfig = CorsConfiguration()
                     corsConfig.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     corsConfig.setAllowedOriginPatterns(
-                        listOf("*")
+                        listOf("*"),
                     )
                     corsConfig.allowedHeaders = listOf("*")
                     corsConfig.allowCredentials = true
@@ -41,24 +41,28 @@ class SecurityConfig(
                 }
             }
             .authorizeHttpRequests {
-                it.requestMatchers("/auth/**").permitAll()
-                    .requestMatchers("/user/admin").hasRole("USER")
-                    .requestMatchers("/user/**").hasRole("ADMIN")
+                it
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
                     .requestMatchers(
                         "/swagger-ui/**",
                         "/swagger-ui.html",
                         "/swagger-resources/*",
-                        "/error",
                         "/api-docs/**",
-                        "/api-docs"
+                        "/api-docs",
+                        "/actuator",
+                        "/error",
+                        "/actuator/**",
                     ).permitAll()
-                    .anyRequest().authenticated()
+                    .anyRequest()
+                    .authenticated()
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .authenticationProvider(
-                getAuthenticationProvider()
+                getAuthenticationProvider(),
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
@@ -74,6 +78,5 @@ class SecurityConfig(
     fun getPasswordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
-    fun getAuthenticationManager(config: AuthenticationConfiguration): AuthenticationManager =
-        config.authenticationManager
+    fun getAuthenticationManager(config: AuthenticationConfiguration): AuthenticationManager = config.authenticationManager
 }

@@ -1,38 +1,32 @@
 package com.albatros.springsecurity.controller
 
-import com.albatros.springsecurity.domain.model.database.User
 import com.albatros.springsecurity.domain.service.UserService
-import jakarta.validation.Valid
-import org.springframework.data.domain.Pageable
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @Validated
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api")
 class UserController(private val service: UserService) {
+    @DeleteMapping("/user/{userId}")
+    @Operation(summary = "Delete user by id")
+    fun deleteUser(
+        @PathVariable userId: Long,
+    ) = service.deleteById(userId)
 
-    @GetMapping("/get/all")
-    fun getAll() = service.list()
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "Get user by id")
+    fun getById(
+        @PathVariable userId: Long,
+    ) = service.getUserById(userId)
 
-    @GetMapping("/get/all/paginated")
-    fun getAllPaginated(page: Pageable) = service.listPaginated(page)
-
-    @GetMapping("/delete/{userId}")
-    fun deleteUser(@PathVariable userId: Long) = service.deleteById(userId)
-
-    @PostMapping("/save", consumes = ["application/json"])
-    fun saveUser(@Valid @RequestBody user: User) = service.createUser(user)
-
-    @GetMapping("/get/{userId}")
-    fun getById(@PathVariable userId: Long) = service.getUserById(userId)
-
-    @GetMapping("/admin")
-    @Deprecated(message = "For demonstration purposes only")
+    @PutMapping("/user/get-admin")
+    @Operation(summary = "Grants admin role for current user. For test purpose only")
     fun getAdminForCurrentUser() = service.getAdmin()
 }

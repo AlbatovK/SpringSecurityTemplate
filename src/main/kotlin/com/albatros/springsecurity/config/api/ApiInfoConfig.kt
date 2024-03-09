@@ -30,5 +30,5 @@ data class ApiInfoConfig(
     @field:NotEmpty
     val externalDocsDescription: String,
     @field:NotEmpty
-    val externalDocsUrl: String
+    val externalDocsUrl: String,
 )

@@ -4,5 +4,5 @@ import jakarta.validation.constraints.NotBlank
 
 data class RefreshTokenRequest(
     @field:NotBlank
-    val token: String
+    val token: String,
 )

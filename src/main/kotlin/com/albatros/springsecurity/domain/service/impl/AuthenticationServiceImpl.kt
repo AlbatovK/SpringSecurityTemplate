@@ -32,17 +32,16 @@ class AuthenticationServiceImpl(
     private val authenticationManager: AuthenticationManager,
     private val userDetailsService: UserDetailsService,
     private val refreshTokenRepository: RefreshTokenRepository,
-    private val jwtConfig: JwtConfig
+    private val jwtConfig: JwtConfig,
 ) : AuthenticationService {
-
     override fun signUp(request: SignUpRequest): JwtAuthenticationResponse {
-
-        val user = User(
-            username = request.username,
-            email = request.email,
-            password = passwordEncoder.encode(request.password),
-            role = Role.ROLE_USER,
-        )
+        val user =
+            User(
+                username = request.username,
+                email = request.email,
+                password = passwordEncoder.encode(request.password),
+                role = Role.ROLE_USER,
+            )
 
         userService.createUser(user)
 
@@ -51,13 +50,14 @@ class AuthenticationServiceImpl(
 
         refreshTokenRepository.save(
             RefreshToken(
-                refreshToken, user.username
-            )
+                refreshToken,
+                user.username,
+            ),
         )
 
         return JwtAuthenticationResponse(
             accessToken = accessToken,
-            refreshToken = refreshToken
+            refreshToken = refreshToken,
         )
     }
 
@@ -77,27 +77,33 @@ class AuthenticationServiceImpl(
 
         return JwtAuthenticationResponse(
             accessToken = generateAccessToken(currentUserDetails),
-            refreshToken = refreshToken.value
+            refreshToken = refreshToken.value,
         )
     }
 
-    private fun generateAccessToken(user: UserDetails) = jwtService.generateToken(
-        user, Date(System.currentTimeMillis() + jwtConfig.accessTokenExpiration)
-    )
+    private fun generateAccessToken(user: UserDetails) =
+        jwtService.generateToken(
+            user,
+            Date(System.currentTimeMillis() + jwtConfig.accessTokenExpiration),
+        )
 
-    private fun generateRefreshToken(user: UserDetails) = jwtService.generateToken(
-        user, Date(System.currentTimeMillis() + jwtConfig.refreshTokenExpiration)
-    )
+    private fun generateRefreshToken(user: UserDetails) =
+        jwtService.generateToken(
+            user,
+            Date(System.currentTimeMillis() + jwtConfig.refreshTokenExpiration),
+        )
 
     override fun signIn(request: SignInRequest): JwtAuthenticationResponse {
         authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
-                request.username, request.password
+                request.username,
+                request.password,
+            ),
+        )
+        val user =
+            userDetailsService.loadUserByUsername(
+                request.username,
             )
-        )
-        val user = userDetailsService.loadUserByUsername(
-            request.username
-        )
 
         val accessToken = generateAccessToken(user)
         val refreshToken = generateRefreshToken(user)
@@ -108,7 +114,7 @@ class AuthenticationServiceImpl(
 
         return JwtAuthenticationResponse(
             accessToken = accessToken,
-            refreshToken = refreshToken
+            refreshToken = refreshToken,
         )
     }
 }

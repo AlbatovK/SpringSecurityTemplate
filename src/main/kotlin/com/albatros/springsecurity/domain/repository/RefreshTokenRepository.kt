@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface RefreshTokenRepository : CommonRepository<RefreshToken> {
     fun findByOwnerUsername(ownerUsername: String): RefreshToken?
+
     fun findByValue(value: String): RefreshToken?
 }

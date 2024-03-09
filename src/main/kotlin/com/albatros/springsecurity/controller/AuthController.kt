@@ -13,17 +13,22 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @Validated
-@RequestMapping("/auth")
+@RequestMapping("api/auth")
 class AuthController(
     private val authenticationService: AuthenticationService,
 ) {
     @PostMapping("/sign-up")
-    fun signUp(@Valid @RequestBody signUpRequest: SignUpRequest) = authenticationService.signUp(signUpRequest)
+    fun signUp(
+        @Valid @RequestBody signUpRequest: SignUpRequest,
+    ) = authenticationService.signUp(signUpRequest)
 
     @PostMapping("/sign-in")
-    fun signIn(@Valid @RequestBody signInRequest: SignInRequest) = authenticationService.signIn(signInRequest)
+    fun signIn(
+        @Valid @RequestBody signInRequest: SignInRequest,
+    ) = authenticationService.signIn(signInRequest)
 
     @PostMapping("/refresh")
-    fun refreshAccessToken(@Valid @RequestBody refreshTokenRequest: RefreshTokenRequest) =
-        authenticationService.refreshAccessToken(refreshTokenRequest)
+    fun refreshAccessToken(
+        @Valid @RequestBody refreshTokenRequest: RefreshTokenRequest,
+    ) = authenticationService.refreshAccessToken(refreshTokenRequest)
 }

@@ -10,9 +10,7 @@ import org.springframework.validation.annotation.Validated
 @Service
 @Validated
 class CustomUserDetailsService(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : UserDetailsService {
-
-    override fun loadUserByUsername(username: String): UserDetails =
-        userRepository.findByUsername(username) ?: throw NotFoundException()
+    override fun loadUserByUsername(username: String): UserDetails = userRepository.findByUsername(username) ?: throw NotFoundException()
 }

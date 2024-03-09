@@ -10,6 +10,6 @@ class ValidationErrorException(val violations: List<Violation>) : AbstractApiExc
 
     data class Violation(
         val fieldName: String,
-        val message: String
+        val message: String,
     )
 }

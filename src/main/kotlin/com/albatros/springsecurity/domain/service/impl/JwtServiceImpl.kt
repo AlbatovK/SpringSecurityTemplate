@@ -13,12 +13,15 @@ import java.util.Date
 @Service
 @Validated
 class JwtServiceImpl(private val jwtConfig: JwtConfig) : JwtService {
+    private val signingKey =
+        Keys.hmacShaKeyFor(
+            jwtConfig.key.toByteArray(),
+        )
 
-    private val signingKey = Keys.hmacShaKeyFor(
-        jwtConfig.key.toByteArray()
-    )
-
-    override fun generateToken(userDetails: UserDetails, expirationDate: Date): String {
+    override fun generateToken(
+        userDetails: UserDetails,
+        expirationDate: Date,
+    ): String {
         return generateToken(
             userDetails,
             expirationDate,
@@ -28,37 +31,41 @@ class JwtServiceImpl(private val jwtConfig: JwtConfig) : JwtService {
                     put("email", userDetails.email)
                     put("role", userDetails.role)
                 }
-            }
+            },
         )
     }
 
     private fun generateToken(
         userDetails: UserDetails,
         expirationDate: Date,
-        additionalClaims: Map<String, Any>
-    ): String = Jwts.builder()
-        .claims()
-        .subject(userDetails.username)
-        .issuedAt(Date())
-        .expiration(expirationDate)
-        .add(additionalClaims)
-        .and()
-        .signWith(signingKey)
-        .compact()
+        additionalClaims: Map<String, Any>,
+    ): String =
+        Jwts.builder()
+            .claims()
+            .subject(userDetails.username)
+            .issuedAt(Date())
+            .expiration(expirationDate)
+            .add(additionalClaims)
+            .and()
+            .signWith(signingKey)
+            .compact()
 
     override fun extractUsername(token: String): String? = extractAllClaims(token).subject
 
-    override fun isTokenValid(token: String, userDetails: UserDetails): Boolean =
-        extractUsername(token) == userDetails.username && !isTokenExpired(token)
+    override fun isTokenValid(
+        token: String,
+        userDetails: UserDetails,
+    ): Boolean = extractUsername(token) == userDetails.username && !isTokenExpired(token)
 
     private fun isTokenExpired(token: String) =
         extractAllClaims(token).expiration.before(
-            Date()
+            Date(),
         )
 
-    private fun extractAllClaims(token: String) = Jwts.parser()
-        .verifyWith(signingKey)
-        .build()
-        .parseSignedClaims(token)
-        .payload
+    private fun extractAllClaims(token: String) =
+        Jwts.parser()
+            .verifyWith(signingKey)
+            .build()
+            .parseSignedClaims(token)
+            .payload
 }

@@ -9,11 +9,21 @@ import org.springframework.validation.annotation.Validated
 @Validated
 interface UserService {
     fun deleteById(userId: Long)
-    fun createUser(@Valid user: User): User
+
+    fun createUser(
+        @Valid user: User,
+    ): User
+
     fun getUserById(userId: Long): User
+
     fun list(): List<User>
+
     fun listPaginated(page: Pageable): Slice<User>
-    fun updateUser(@Valid user: User, userId: Long): User
+
+    fun updateUser(
+        @Valid user: User,
+        userId: Long,
+    ): User
 
     @Deprecated(message = "For demonstration purposes only")
     fun getAdmin()
